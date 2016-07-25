@@ -22,6 +22,7 @@ document.getElementById('fileinput').addEventListener('change', function(e){
     var f=files[0];
     var file=files[0];
     // This code is only for demo ...
+    console.log('Starting to Convert');
     var i,f;
     for (i = 0, f = files[i]; i != files.length; ++i) {
         console.log("name : " + f.name);
@@ -36,18 +37,19 @@ document.getElementById('fileinput').addEventListener('change', function(e){
             var workbook = XLSX.read(data, {type: 'binary'});
             console.log(workbook.SheetNames[0]);
 
-            var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
-            var json_object = JSON.stringify(XL_row_object);
+             XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+            json_object = JSON.stringify(XL_row_object);
             console.log("Lenght of the JSON OBJECT="+XL_row_object.length);
             //console.log(json_object);
             // console.log(JSON.parse(XLSX.utils.sheet_to_json(workbook.Sheets['book_1'])));
-            console.log(XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]));
+            console.log(json_object);
             /* DO SOMETHING WITH workbook HERE */
             //wrire the objects
             for(var i=0;i<XL_row_object.length;i++)
             {
                 var issue="Issue #";
                 console.log("Issue No = " +XL_row_object[i]["Issue #"]+" Room Number = "+XL_row_object[i]["Room"]+" Status ="+XL_row_object[i]["Status"]);
+
                 //console.log("Room Number = "+XL_row_object[i]["Room"]);
                 // console.log("Status ="+XL_row_object[i]["Status"]);
                 //comparing each layer
@@ -55,6 +57,7 @@ document.getElementById('fileinput').addEventListener('change', function(e){
                 //assing off=closed
 
             }
+            alert('File Translated, Please click on download.');
 
         };
         reader.readAsBinaryString(f);
@@ -66,6 +69,40 @@ document.getElementById('fileinput').addEventListener('change', function(e){
 //Create the object of issues, Room and Status which is use bluebeam Sofwtare
 //writing this to the file
 //using this file in different file to import this in the BLUEBEAM software
+(function(){
+var textFile = null,
+    makeJsonFile = function(json_object){
+        var data = new Blob([json_object],{type: "application/json"});
+
+        alert(json_object);
+
+        //if we are replacing a previously generated file we need to manually
+        //revoke the object URL to avoid the memory leaks
+
+        if(textFile !== null){
+            window.URL.revokeObjectURL(textFile);
+      
+        }
+    textFile=window.URL.createObjectURL(data);
+    return textFile;
+    };
+
+    var create=document.getElementById('create');
+    create.addEventListener('click',function(){
+        var link=document.createElement('a');
+        link.setAttribute('download','translated.json');
+        link.href=makeJsonFile(json_object);
+        document.body.appendChild(link);
+        alert(json_object);
+        //wait for the link to be added to the document
+
+        window.requestAnimationFrame(function() {
+            var event = new MouseEvent('click');
+            link.dispatchEvent(event);
+            document.body.removeChild(link);
+        });
+    },false);
+})();
 
 function write_to_file(Sheet_object){
 
