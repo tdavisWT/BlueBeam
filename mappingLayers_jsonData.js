@@ -13,9 +13,15 @@
 $( document ).ready(function() {
 
     $.getJSON('translated.json', function(data) {
-        var result=JSON.stringify(data);
-        var result2=JSON.parse(result);
-        alert(result2);
-        console.log(result);
+       //alert(data);
+        //console.log(data);
+        for(var i=0;i<data.length;i++){
+            console.log(data[i]["Issue #"]);
+        }
+        alert("Total Length="+data.length);
+        // var result=JSON.stringify(data);
+       // var result2=JSON.parse(data);
+        //alert(result2);
+        //console.log(result2);
     }); console.log( "ready!" );
 });
