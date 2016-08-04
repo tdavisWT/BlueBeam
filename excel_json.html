@@ -41,7 +41,20 @@
 <body>
 <input type="file" id="fileinput" />
 <button id="create">Download File</button>
+<script>var room=["103J102","103J102","103J102","103J202","103J202"];
+
+var layers=["103J102-O","103J102-C","103J202-C","103J202-O"];
+var value, set_room = new Set(room);
+console.log(set_room);
+console.log(set_room.size);
+    //for(var j=0;j<set_room.size;j++)
+var i=0;
+    set_room.forEach(function(value){
+        console.log(value);
+        console.log(i);
+        i++;
+});
+</script>
 <script src="excel_to_json.js"></script>
-<script src="mappingLayers_jsonData.js"></script>
 </body>
 </html>

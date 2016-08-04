@@ -15,7 +15,7 @@
 
 
 //this function works for only single worksheet present in the excel sheet
-
+var data_file=' ';
 
 document.getElementById('fileinput').addEventListener('change', function(e){
     var files = e.target.files;
@@ -40,29 +40,28 @@ document.getElementById('fileinput').addEventListener('change', function(e){
              XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
             json_object = JSON.stringify(XL_row_object);
             console.log("Lenght of the JSON OBJECT="+XL_row_object.length);
-            //console.log(json_object);
+            console.log(json_object);
             // console.log(JSON.parse(XLSX.utils.sheet_to_json(workbook.Sheets['book_1'])));
             console.log(json_object);
             /* DO SOMETHING WITH workbook HERE */
             //wrire the objects
+             data_file='';
             for(var i=0;i<XL_row_object.length;i++)
             {
                 var issue="Issue #";
                 console.log("Issue No = " +XL_row_object[i]["Issue #"]+" Room Number = "+XL_row_object[i]["Room"]+" Status ="+XL_row_object[i]["Status"]);
 
-                //console.log("Room Number = "+XL_row_object[i]["Room"]);
-                // console.log("Status ="+XL_row_object[i]["Status"]);
-                //comparing each layer
-                //assign open=on;
-                //assing off=closed
+                data_file  = data_file + XL_row_object[i]["Issue #"]+' '+XL_row_object[i]["Room"]+' '+XL_row_object[i]["Status"]+' '+XL_row_object[i]["Color"]+'\n';
 
             }
+            console.log(data_file);
+           // var data = new Blob([data_file], {type: 'text/plain'});
+           // textFile=window.URL.createObjectURL(data);
             alert('File Translated, Please click on download.');
 
         };
         reader.readAsBinaryString(f);
-    }
-    ;
+    };
 
 
 }, false);
@@ -71,10 +70,11 @@ document.getElementById('fileinput').addEventListener('change', function(e){
 //using this file in different file to import this in the BLUEBEAM software
 (function(){
 var textFile = null,
-    makeJsonFile = function(json_object){
-        var data = new Blob([json_object],{type: "application/json"});
+    makeJsonFile = function(data_file){
+    //writing to the file
+        var data = new Blob([data_file], {type: 'text/plain'});
 
-        alert(json_object);
+        alert(data_file);
 
         //if we are replacing a previously generated file we need to manually
         //revoke the object URL to avoid the memory leaks
@@ -90,10 +90,10 @@ var textFile = null,
     var create=document.getElementById('create');
     create.addEventListener('click',function(){
         var link=document.createElement('a');
-        link.setAttribute('download','translated.json');
-        link.href=makeJsonFile(json_object);
+        link.setAttribute('download','translated_report.txt');
+        link.href=makeJsonFile(data_file);
         document.body.appendChild(link);
-        alert(json_object);
+        alert(data_file);
         //wait for the link to be added to the document
 
         window.requestAnimationFrame(function() {
@@ -104,7 +104,7 @@ var textFile = null,
     },false);
 })();
 
-function write_to_file(Sheet_object){
+/*function write_to_file(Sheet_object){
 
     var layers = [
         {issues: "",
@@ -120,4 +120,4 @@ function write_to_file(Sheet_object){
     }
 
 
-};
+};*/
