@@ -1,0 +1,106 @@
+
+var stmFileData = util.readFileIntoStream();
+var strTextData = util.stringFromStream(stmFileData).split('\n');
+var ocgArray=this.getOCGs();
+
+for(var j=0;j<ocgArray.length;j++)
+{
+  ocgArray[j].state = false;
+}
+room=[];
+
+
+status=[];
+set_status=[];
+for(var i=0;i<strTextData.length-1;i++){
+       data=strTextData[i].split(' ');
+       room[i]=data[1];
+       status[i]=data[2].toLowerCase();
+console.println('Room='+room[i]+'Status='+status[i]);
+}
+
+var set_room = new Set(room);
+var i=0; var flag=0; var flag1=0;
+
+for(value of set_room)
+{
+console.println('hi '+value);
+}
+for(value of set_room)
+{
+   for(var j=0;j<room.length;j++)
+   {
+     if(value==room[j])
+     {
+           // app.alert(room[j]+status[j]);
+             flag1=1;  //set the flag if matched
+           //  console.println('Matched');
+             if(status[j]=='open')
+             {
+                 app.alert('open set up');
+                 set_status[i]='open';
+                 flag=1;
+                 break;
+             }
+    }
+   }
+ //setting the close status
+ if(flag1==1 && flag==0){
+       app.alert('Closed Set up');
+       set_status[i]='closed';
+}
+i++;flag1=0;flag=0;
+}
+ 
+for(var k=0;k<set_status.length;k++)
+{
+    console.println(set_status[k]);
+}
+var n=0; //for fetching the 
+for( value of set_room)
+{
+     for(var k=0;k<ocgArray.length;k++)
+     {
+           var layer_name=ocgArray[k].name;
+         if(layer_name.indexOf(value)!=-1)
+         {
+               app.alert(layer_name);
+               var oN=value+'-O';  //open
+               var cN=value+'-C';  //close
+               if(layer_name==oN)
+               {
+                      app.alert('open matched');
+                    if(set_status[n]=='open'){
+                     ocgArray[k].state = true;
+                     // console.println(ocgArray[k].status);
+                     }
+                    else{
+                     ocgArray[k].state = false;
+                      // console.println(ocgArray[k].status);
+                     }
+               }
+               if(layer_name==cN)
+               {
+                        app.alert('Closed matched');                 
+                   if(set_status[n]=='open'){
+                     ocgArray[k].state = false;
+                     //console.println(ocgArray[k].status);
+                     }
+                    else{
+                     ocgArray[k].state = true;
+                     //console.println(ocgArray[k].status);
+                     }
+               }
+         }
+     }n++;
+}    
+ 
+
+
+
+
+for(var j=0;j<ocgArray.length;j++){
+
+//var ocg=ocgArray[i];
+console.println(ocgArray[j].name+" = "+ocgArray[j].state);
+}
