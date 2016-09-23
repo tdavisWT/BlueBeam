@@ -35,7 +35,7 @@ for(value of set_room)
            // app.alert(room[j]+status[j]);
              flag1=1;  //set the flag if matched
            //  console.println('Matched');
-             if(status[j]=='open')
+             if(status[j]=='open' || status[j]=='in_review' || status[j]=='pending' || status[j]=='Pending')
              {
                  app.alert('open set up');
                  set_status[i]='open';
